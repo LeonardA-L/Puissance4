@@ -1,5 +1,4 @@
-# Yes
-:- [ia1.pl].
-# load AI modules
+% Yes
+:- [ia1].
+% load AI modules
 :- use_module(ia1).
-play(A).
