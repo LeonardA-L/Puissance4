@@ -1,4 +1,4 @@
 % Yes
-:- [ia1].
+:- [ai1].
 % load AI modules
-:- use_module(ia1).
+:- use_module(ai1).
