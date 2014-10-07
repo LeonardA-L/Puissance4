@@ -1,0 +1,7 @@
+body {
+  font-family: 'Lobster', cursive;
+}
+
+#canv {
+  border: 2px solid #000;
+}
