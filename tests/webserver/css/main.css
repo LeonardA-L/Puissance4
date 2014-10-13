@@ -1,7 +1,47 @@
 body {
   font-family: 'Lobster', cursive;
+  margin: 0;
+}
+
+h1 {
+    margin: 0 5px;
+}
+
+header {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid;
 }
 
 #canv {
   border: 2px solid #000;
+  width: 640px;
+  height: 480px;
+}
+
+table {
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ddd;
+    border-radius: 4px 4px;
+}
+
+thead td {
+    text-align: center;
+}
+
+.cell {
+    border: 1px solid;
+    width: 40px;
+    height: 40px;
+    border-radius: 44px 44px;
+    background-color: #fff;
+    margin: 10px;
+}
+
+.yellow {
+    background-color: #ff0;
+}
+
+.red {
+    background-color: #f00;
 }
