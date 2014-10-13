@@ -1,4 +1,4 @@
-:- use_module(library(su)).
+:- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/websocket)).
 :- use_module(library(http/http_server_files)).

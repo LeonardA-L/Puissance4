@@ -77,11 +77,22 @@
 
     var setUpWebSocket = function() {
         ws = new WebSocket('ws://127.0.0.1:9000/ws');
+        var sayHi = function() {
+            var msg = 'Hello!';
+            ws.send(msg);
+            console.info('Said "' + msg + '" to server.');
+        };
 
         ws.onopen = function(event) {
-            console.log('WebSocket connection up and running!');
+            console.info('WebSocket connection up and running!');
             removeLoadingMessage();
+            sayHi();
         }
+
+        ws.onmessage = function(messageEvent) {
+            console.log('Got back: "' + messageEvent.data + '"');
+        };
+
     };
 
     var main = function() {
