@@ -6,15 +6,10 @@
 
 victory(_).
 
+% not stopping for the moment.
 % load AI modules
 playGame(X) :- A is mod(X,2)+1, aiplayA(A), N is X+1,
 	       victory(X),
 	       B is mod(N,2)+1, aiplayB(B), K is N+1,
 	       victory(N),
 	       playGame(K).
-
-
-
-
-
-
