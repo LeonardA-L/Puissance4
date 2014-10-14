@@ -15,7 +15,13 @@ affich:-write('Affichage\n'),
 
 %Si un jeton existe dans une colonne, on peut ajouter encore un
 add(Col, NbP):-write('Modification...'),
+		Col < 8,
+		Col > 0,
+		NbP > 0,
+		NbP < 3,
 		etat(L),
+		findElem(L,Col,Res),
+		Res < 1,
 		findPos(L,Col,0,Pos),
 		Pos1 is Pos-7,
 		replace(L,Pos1,NbP,Resultat),
