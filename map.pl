@@ -14,7 +14,7 @@ affich:-write('Affichage\n'),
 		write('\nFin affichage\n').
 
 %Si un jeton existe dans une colonne, on peut ajouter encore un
-add(Col,NbP):-write('Modification...'),
+add(Col, NbP):-write('Modification...'),
 		etat(L),
 		findPos(L,Col,0,Pos),
 		Pos1 is Pos-7,
@@ -24,20 +24,20 @@ add(Col,NbP):-write('Modification...'),
 		write('\nModifié\n').
 
 salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
-salut(_).
+salut(W).
 
-findPos(_,Col,1,PosFinal):-PosFinal = Col.
-findPos(_,Col,-1,PosFinal):-PosFinal is Col.
-findPos(List,Col,_,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
+findPos(List,Col,1,PosFinal):-PosFinal = Col.
+findPos(List,Col,2,PosFinal):-PosFinal = Col.
+findPos(List,Col,-1,PosFinal):-PosFinal is Col.
+findPos(List,Col,Val,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
 
 replace([_|T], 1, X, [X|T]).
 replace([H|T], I, X, [H|R]):- I > 0, NI is I-1, replace(T, NI, X, R), !.
 replace(L, _, _, L).
 
-findElem([Element | _], 1, Resultat):-Resultat = Element.
-findElem([Element | _], 2, Resultat):-Resultat = Element.
+findElem([Element | List], 1, Resultat):-Resultat = Element.
 findElem([],N, Resultat):- N > 0, Resultat = -1.
-findElem([_|List],N, Resultat) :- N1 is N-1, findElem(List,N1,Resultat).
+findElem([Element|List],N, Resultat) :- N1 is N-1, findElem(List,N1,Resultat).
 
 showGrid:-	etat(L),
 			length(L,Taille),
@@ -48,11 +48,3 @@ showGrid:-	etat(L),
 				write(E),
 				salut(I))
 			).
-
-
-
-
-
-
-
-
