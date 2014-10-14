@@ -4,12 +4,10 @@
 :- use_module(ai1, [play/1 as aiplayA]).
 :- use_module(ai2, [play/1 as aiplayB]).
 
-victory(X):-X<10.
+victory(X):-X>10, write('victory'),write(X).
 
-% not stopping for the moment.
 % load AI modules
-playGame(X) :- A is mod(X,2)+1, aiplayA(A), N is X+1,
-	       victory(X),
-	       B is mod(N,2)+1, aiplayB(B), K is N+1,
-	       victory(N),
-	       playGame(K).
+playTurn(X) :- mod(X,2) == 0, A is mod(X,2)+1, aiplayA(A).
+playTurn(X) :- A is mod(X,2)+1, aiplayB(A).
+
+playGame(X) :- repeat, playTurn(X), X = X+1, (victory(X)).
