@@ -1,0 +1,49 @@
+% use_module(nom_du_module).
+%module(UI, showGrid).
+
+:- dynamic etat/1.
+
+etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).
+
+
+
+affich:-write('Affichage\n'),
+		etat(L),
+		nth0(0, L, E),
+		write(E),
+		write('\nFin affichage\n').
+
+%Si un jeton existe dans une colonne, on peut ajouter encore un
+add(Col):-write('Modification...'),
+		etat(L),
+		findPos(L,Col,0,Pos),
+		Pos1 is Pos-7,
+		replace(L,Pos1,1,Resultat),
+		retract(etat(L)),
+		assert(etat(Resultat)),
+		write('\nModifié\n').
+
+salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
+salut(W).
+
+findPos(List,Col,1,PosFinal):-PosFinal = Col.
+findPos(List,Col,-1,PosFinal):-PosFinal is Col.
+findPos(List,Col,Val,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
+
+replace([_|T], 1, X, [X|T]).
+replace([H|T], I, X, [H|R]):- I > 0, NI is I-1, replace(T, NI, X, R), !.
+replace(L, _, _, L).
+
+findElem([Element | List], 1, Resultat):-Resultat = Element.
+findElem([],N, Resultat):- N > 0, Resultat = -1.
+findElem([Element|List],N, Resultat) :- N1 is N-1, findElem(List,N1,Resultat).
+
+showGrid:-	etat(L),
+			length(L,Taille),
+			TailleN is Taille - 1,
+			forall(between(0,TailleN,I),
+				(nth0(I, L, E),
+				write(' | '),
+				write(E),
+				salut(I))
+			).
