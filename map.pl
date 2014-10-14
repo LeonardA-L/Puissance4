@@ -1,4 +1,4 @@
-% use_module(nom_du_module).
+use_module(library(random)).
 %module(UI, showGrid).
 
 :- dynamic etat/1.
@@ -27,7 +27,7 @@ add(Col, NbP):-write('Modification...'),
 		replace(L,Pos1,NbP,Resultat),
 		retract(etat(L)),
 		assert(etat(Resultat)),
-		write('\nModifié\n').
+		write('\nModifié\n'),!.
 
 reset:- retract(etat(L)),
 		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).
