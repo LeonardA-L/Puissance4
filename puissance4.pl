@@ -4,7 +4,7 @@
 :- use_module(ai1, [play/1 as aiplayA]).
 :- use_module(ai2, [play/1 as aiplayB]).
 
-victory(_).
+victory(X):-X<10.
 
 % not stopping for the moment.
 % load AI modules
