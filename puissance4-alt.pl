@@ -18,11 +18,11 @@ isNotWin(_, _, _) :- \+isWin(_,_,_).
 
 % At first, no winner, we choose 'c' as the current state 
 :- dynamic gagnant/1.
-gagnant(c).
+gagnant(pasDeGagnant).
 
 % Two possibilities : A or B win.
-victory:-gagnant(a), write('Joueur A gagne\n').
-victory:-gagnant(b), write('Joueur B gagne\n').
+victory:-gagnant(joueurA), write('Joueur A gagne\n').
+victory:-gagnant(joueurB), write('Joueur B gagne\n').
 
 moveIsOk(Pos) :-
 			Pos < 8,
@@ -33,6 +33,9 @@ moveIsOk(Pos) :-
 
 replay(1) :- aiplayA(1).
 replay(2) :- aiplayB(2).
+
+changeWinner(1):- assert(gagnant(joueurA)).
+changeWinner(2):- assert(gagnant(joueurB)).
 
 % Check wether player can move the token in the column : if he can, the predicate is false, prolog will try the following one. If he can't, predicate is true, writes "bad move" and ask the user for another column.
 
@@ -56,7 +59,8 @@ replay(2) :- aiplayB(2).
 
 	placeAToken(_,Player) :- write('In 3rd placeAToken\n'), 
 							 isWin(_, _, _), 
-							 assert(gagnant(Player)),
+							 retract(gagnant(pasDeGagnant)),
+							 changeWinner(Player),
 							 write('Out of 3rd placeAToken\n').
 
 % PlayerA makes a move, then you check if he won or not, and if he didn't, you keep going.
