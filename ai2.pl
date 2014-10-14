@@ -1,3 +1,3 @@
-% First IA module
+% Dummy AI playing always in the same column (2)
 :- module(ai2, [play/1]).
-play(21).
+play(X) :- add(2,X).
