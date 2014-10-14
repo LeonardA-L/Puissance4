@@ -14,11 +14,11 @@ affich:-write('Affichage\n'),
 		write('\nFin affichage\n').
 
 %Si un jeton existe dans une colonne, on peut ajouter encore un
-add(Col):-write('Modification...'),
+add(Col, NbP):-write('Modification...'),
 		etat(L),
 		findPos(L,Col,0,Pos),
 		Pos1 is Pos-7,
-		replace(L,Pos1,1,Resultat),
+		replace(L,Pos1,NbP,Resultat),
 		retract(etat(L)),
 		assert(etat(Resultat)),
 		write('\nModifié\n').
@@ -27,6 +27,7 @@ salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
 salut(W).
 
 findPos(List,Col,1,PosFinal):-PosFinal = Col.
+findPos(List,Col,2,PosFinal):-PosFinal = Col.
 findPos(List,Col,-1,PosFinal):-PosFinal is Col.
 findPos(List,Col,Val,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
 
