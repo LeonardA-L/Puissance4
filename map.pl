@@ -29,6 +29,9 @@ add(Col, NbP):-write('Modification...'),
 		assert(etat(Resultat)),
 		write('\nModifié\n').
 
+reset:- retract(etat(L)),
+		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).
+
 salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
 salut(W).
 
