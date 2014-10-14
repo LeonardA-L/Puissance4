@@ -27,7 +27,7 @@ add(Col, NbP):-write('Modification...'),
 		replace(L,Pos1,NbP,Resultat),
 		retract(etat(L)),
 		assert(etat(Resultat)),
-		write('\nModifié\n').
+		write('\nModifié\n'),!.
 
 reset:- retract(etat(L)),
 		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).

@@ -4,10 +4,18 @@
 :- use_module(ai1, [play/1 as aiplayA]).
 :- use_module(ai2, [play/1 as aiplayB]).
 
-victory(X):-X>10, write('victory'),write(X).
+:- nb_setval(turn, 0).
+
+victory(X):- X>10, write('victory'),write(X).
 
 % load AI modules
-playTurn(X) :- mod(X,2) == 0, A is mod(X,2)+1, aiplayA(A).
-playTurn(X) :- A is mod(X,2)+1, aiplayB(A).
+%playTurn(X) :- A is (X mod 2)+1; (X mod 2) == 0, aiplayA(A) ; (X mod 2) == 1, aiplayB(A).
+%playTurn(X) :- A is (X mod 2)+1, aiplayB(A).
 
-playGame(X) :- repeat, playTurn(X), X = X+1, (victory(X)).
+playTurn(X) :-  writef('%i',[X mod 2]),((X mod 2) == 0) *->
+     (write('oui'),A is (X mod 2)+1,aiplayA(A))
+  ; 
+    (write('non'),A is (X mod 2)+1,aiplayB(A))
+  .
+
+playGame :- repeat, nb_getval(turn, X), playTurn(X), A is X+1, nb_setval(turn, A), (victory(X)).
