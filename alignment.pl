@@ -18,6 +18,11 @@ generateCombinations(Map, Pos, Combinations):-
 generateVertical(Map, Pos, Combinations):-
     up(N, NewPos).
 
+generateHorizontal(Map, Pos, Combinations).
+
+generateDiagonals(Map, Pos, Combinations).
+
+
 
 %% Find
 
@@ -26,7 +31,7 @@ up(Pos, NewPos):-
     up4(Pos, 0, NewPos).
 up4(Pos, 3, Pos).
 up4(Pos, Iter, NewPos):-
-    Pos >= 7 *->
+    Pos >= 8 *->
     (NextPos is Pos - 7,
     NextIter is Iter + 1,
     up4(NextPos, NextIter, NewPos));
@@ -43,9 +48,78 @@ down4(Pos, Iter, NewPos):-
     down4(NextPos, NextIter, NewPos));
     NewPos = Pos.
 
-generateVertical(Map, Pos, Combinations).
+left(Pos, NewPos):-
+    left4(Pos, 0, NewPos).
 
-generateDiagonals(Map, Pos, Combinations).
+left4(Pos, 3, Pos).
+left4(Pos, Iter, NewPos) :-
+    Rem is Pos mod 7,
+    (Rem \== 1)*->
+    (NextPos is Pos - 1,
+    NextIter is Iter + 1,
+    left4(NextPos, NextIter, NewPos));
+    NewPos = Pos.
+
+right(Pos, NewPos):-
+    right4(Pos, 0, NewPos).
+
+right4(Pos, 3, Pos).
+right4(Pos, Iter, NewPos) :-
+    Rem is Pos mod 7,
+    (Rem \== 0)*->
+    (NextPos is Pos + 1,
+    NextIter is Iter + 1,
+    right4(NextPos, NextIter, NewPos));
+    NewPos = Pos.
+
+upLeft(Pos, NewPos):-
+    upLeftDiag4(Pos, 0, NewPos).
+
+upLeftDiag4(Pos, 3, Pos).
+upLeftDiag4(Pos, Iter, NewPos) :-
+    Rem is Pos mod 7,
+    (Rem \== 1 , Pos >= 8)*->
+    (NextPos is Pos - 8,
+    NextIter is Iter + 1,
+    upLeftDiag4(NextPos, NextIter, NewPos));
+    NewPos = Pos.
+
+upRightDiag(Pos, NewPos):-
+    upRightDiag4(Pos, 0, NewPos).
+
+upRightDiag4(Pos, 3, Pos).
+upRightDiag4(Pos, Iter, NewPos) :-
+    Rem is Pos mod 7,
+    (Pos >= 8, Rem \== 0)*->
+    (NextPos is Pos - 6,
+    NextIter is Iter + 1,
+    upRightDiag4(NextPos, NextIter, NewPos));
+    NewPos = Pos.
+
+downLeftDiag(Pos, NewPos):-
+    downLeftDiag4(Pos, 0, NewPos).
+
+downLeftDiag4(Pos, 3, Pos).
+downLeftDiag4(Pos, Iter, NewPos) :-
+    Rem is Pos mod 7,
+    (Rem \== 1 , Pos =< 35)*->
+    (NextPos is Pos + 6,
+    NextIter is Iter + 1,
+    downLeftDiag4(NextPos, NextIter, NewPos));
+    NewPos = Pos.
+
+
+downRightDiag(Pos, NewPos):-
+    downRightDiag4(Pos, 0, NewPos).
+
+downRightDiag4(Pos, 3, Pos).
+downRightDiag4(Pos, Iter, NewPos) :-
+    Rem is Pos mod 7,
+    (Pos =< 34, Rem \== 0)*->
+    (NextPos is Pos + 8,
+    NextIter is Iter + 1,
+    downRightDiag4(NextPos, NextIter, NewPos));
+    NewPos = Pos.
 
 
 % +1h 50 min :'(
@@ -75,12 +149,40 @@ map1([0,0,0,0,0,0,0,
 
 %% Test directions
 tup:-
-    up4(42, 0, 21),
-    up4(15, 0, 1).
+    up(42, 21),
+    up(15, 1).
 
 tdown:-
-    down4(42, 0, 42),
-    down4(7, 0 , 28).
+    down4(42, 42),
+    down4(7, 28).
+
+tleft:-
+    left(1, 1),
+    left(7, 4),
+    left(36, 36),
+    left(42, 39).
+
+tupleft:-
+    upLeftDiag(9, 1),
+    upLeftDiag(1, 1),
+    upLeftDiag(42, 18).
+
+tupright:-
+    upRightDiag(8, 2),
+    upRightDiag(14, 14),
+    upRightDiag(25, 7).
+
+tdownleft:-
+    downLeftDiag(2, 8),
+    downLeftDiag(24, 36),
+    downLeftDiag(41, 41),
+    downLeftDiag(35, 41).
+
+tdownright:-
+    downRightDiag(26, 42),
+    downRightDiag(1, 25),
+    downRightDiag(23, 39),
+    downRightDiag(6, 14).
 
 
 %% Test checkCombinations
