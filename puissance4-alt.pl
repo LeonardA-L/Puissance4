@@ -21,8 +21,8 @@ isNotWin(_, _, _) :- \+isWin(_,_,_).
 gagnant(c).
 
 % Two possibilities : A or B win.
-victory:-gagnant(a), write('Joueur A gagne').
-victory:-gagnant(b), write('Joueur B gagne').
+victory:-gagnant(a), write('Joueur A gagne\n').
+victory:-gagnant(b), write('Joueur B gagne\n').
 
 moveIsOk(Pos) :-
 			Pos < 8,
@@ -31,21 +31,37 @@ moveIsOk(Pos) :-
 			findElem(L,Pos,Res),
 			Res < 1.
 
+replay(1) :- aiplayA(1).
+replay(2) :- aiplayB(2).
 
-% Check wether player can move the token in the column : if he can, the predicate is false, prolog will try the following. If he can't, predicate is true, writes "bad move" and ask the user for another column.
+% Check wether player can move the token in the column : if he can, the predicate is false, prolog will try the following one. If he can't, predicate is true, writes "bad move" and ask the user for another column.
 
-	%placeAToken(Pos,Player):- \+ moveIsOk(Pos), write('bad move'), aiplayA(Player).
+	placeAToken(Pos,Player):- write('In 1st placeAToken\n'), 
+							  \+moveIsOk(Pos), 
+							  write('bad move\n'), 
+							  replay(Player),
+							  write('Out of 1st placeAToken\n').   %should rarely come out
 
 % If last predicate returned false, try adding the token and check if the player won :
 
-	placeAToken(Pos,Player) :- add(Pos,Player), isNotWin(_, _, _).
+	placeAToken(Pos,Player) :- write('In 2nd placeAToken\n'),
+							   write(Player),
+							   write('\n'), 
+							   write(Pos), 
+							   add(Pos,Player), 
+							   isNotWin(_, _, _),
+							   write('Out of 2nd placeAToken\n').
 
 % if the last one failed too, maybe the user has won, in that case, alert the rest of the soft
 
-	placeAToken(Pos,Player) :- isWin(_, _, _), assert(gagnant(Player)).
+	placeAToken(_,Player) :- write('In 3rd placeAToken\n'), 
+							 isWin(_, _, _), 
+							 assert(gagnant(Player)),
+							 write('Out of 3rd placeAToken\n').
 
 % PlayerA makes a move, then you check if he won or not, and if he didn't, you keep going.
-%If gagnant(c) is false, it means playerA won : then victory will be true and loop will exit. Also in that case, playTurn will fail after aiplayA(1), which will not affect the last move or the predicate gagnant (because they use "assert")
+%If gagnant(c) is false, it means playerA won : then victory will be true and loop will exit. 
+%Also in that case, playTurn will fail after aiplayA(1), which will not affect the last move or the predicate gagnant (because they use "assert")
 %If gagnant(c) is true, nothing has changed, A has not won, we keeo going with B. 
 % aiplayA(1) calls a predicate in ai1 which then calls to placeAToken here
 
