@@ -17,3 +17,4 @@ playGame(X) :- A is mod(X,2)+1, aiplayA(A), N is X+1,
 
 
 
+
