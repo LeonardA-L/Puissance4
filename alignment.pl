@@ -6,14 +6,16 @@ isWin(Map, Player, Pos):-
 
 isNotAWin(Map, Player, Pos):-
     generateCombinations(Map, Pos, Combinations),
-    checkCombinations(Player, Combinations).
+    !,
+    \+ checkCombinations(Player, Combinations).
 
 generateCombinations(Map, Pos, Combinations):-
     generateHorizontal(Map, Pos, HorizontalCombinations),
     generateVertical(Map, Pos, VerticalCombinations),
     generateDiagonals(Map, Pos, DiagonalCombinations),
-    append(HorizontalCombinations, VerticalCombinations, Temp),
-    append(Temp, DiagonalCombinations, Combinations).
+    append(HorizontalCombinations,VerticalCombinations, C1),
+    append(C1, DiagonalCombinations, Combinations).
+
 
 
 %% Vertical
@@ -22,75 +24,129 @@ generateVertical(Map, Pos, Combinations):-
      findUp(Pos, UpPos),
      findDown(Pos, DownPos),
      verticalDelta(UpPos, DownPos, Delta),
-     generateVertical_(Map, UpPos, Delta, Combinations).
+     verticalCombinations(Map, UpPos, Delta, Combinations).
 
-generateVertical_(_, _, Delta, []):-
-    Delta =< 3.
-generateVertical_(Map, Start, Delta, Combinations):-
-     verticalCombinations(Map, Start, Delta, Combinations).
 
 verticalDelta(X, Y, Delta):-
     Delta is (Y - X) div 7.
 
-verticalCombinations(_,_,2, []).
+verticalCombinations(_, _, Delta, []):-
+    Delta =< 2.
 verticalCombinations(Map, Pos, Delta, [Combination|Combinations]):-
     verticalCombination(Map, Pos, Combination),
     NextPos is Pos + 7,
     NextDelta is Delta - 1,
     verticalCombinations(Map, NextPos, NextDelta, Combinations).
 
-verticalCombination(Map, Pos, [X1, X2, X3, X4]):-
-    I is Pos + 7,
-    J is Pos + 14,
-    K is Pos + 21,
-    nth1(Pos, Map, X1),
-    nth1(I, Map, X2),
-    nth1(J, Map, X3),
-    nth1(K, Map, X4).
-
+verticalCombination(Map, Pos, Combination):-
+    getCombination(Map, Pos, 7, Combination).
+    
 %% Horizontal
 
 generateHorizontal(Map, Pos, Combinations):-
     findLeft(Pos, Left),
     findRight(Pos, Right),
     horizontalDelta(Left, Right, Delta),
-    generateHorizontal_(Map, Left, Delta, Combinations).
+    horizontalCombinations(Map, Left, Delta, Combinations).
 
-generateHorizontal_(_,_, Delta,[]):-
-    Delta =< 3.
-generateHorizontal_(Map, Pos, Delta, Combinations):-
-    horizontalCombinations(Map, Pos, Delta, Combinations).
 
-horizontalCombinations(_,_,2,[]).
+horizontalCombinations(_,_,Delta,[]):-
+    Delta =< 2.
 horizontalCombinations(Map, Pos, Delta, [Combination|Combinations]):-
     horizontalCombination(Map, Pos, Combination),
     NextPos is Pos + 1,
     NextDelta is Delta - 1,
     horizontalCombinations(Map, NextPos, NextDelta, Combinations).
 
-horizontalCombination(Map, Pos, [X1, X2, X3, X4]):-
-    I is Pos + 1,
-    J is Pos + 2,
-    K is Pos + 3,
-    nth1(Pos, Map, X1),
-    nth1(I, Map, X2),
-    nth1(J, Map, X3),
-    nth1(K, Map, X4).
-    
+horizontalCombination(Map, Pos, Combination):-
+    getCombination(Map, Pos, 1, Combination).
 
 horizontalDelta(Start, End, Delta):-
     Delta is (End - Start).
 
 
-%% Diagonal
+%% Diagonals
 
-generateDiagonals(Map, Pos, Combinations).
+% The diagonal combinations will always start from up and go down.
+% Like 1        3 so => [[1, 2, ..], [2, ..], [3, 4, ..], [4, ..]]
+%       2      4
+%        ......
+
+diagonalCombinationUpLeft(Map, Pos, Combination):-
+    getCombination(Map, Pos, 8, Combination).
+
+diagonalCombinationUpRight(Map, Pos, Combination):-
+    getCombination(Map, Pos, 6, Combination).
+
+
+diagonalDelta(UpPos, DownPos, Delta):-
+    A is (UpPos - 1) mod 7,
+    B is (DownPos - 1) mod 7,
+    maxmin(A, B, Y, X),
+    horizontalDelta(X, Y, Delta).
+
+maxmin(A, B, A, B):-
+    A >= B.
+maxmin(A, B, B, A).
+
+    
+
+generateDiagonals(Map, Pos, Combinations):-
+    generateDiagonalsUpLeft(Map, Pos, C1),
+    generateDiagonalsUpRight(Map, Pos, C2),
+    append(C1, C2, Combinations).
+
+generateDiagonalsUpLeft(Map, Pos, Combinations):-
+    findUpLeft(Pos, UpLeft),
+    findDownRight(Pos, DownRight),
+    diagonalDelta(UpLeft, DownRight, Delta),
+    diagonalCombinationsUpLeft(Map, UpLeft, Delta, Combinations).
+
+diagonalCombinationsUpLeft(_,_,Delta,[]):-
+    Delta =< 2.
+diagonalCombinationsUpLeft(Map, Pos, Delta, [Combination|Combinations]):-
+    diagonalCombinationUpLeft(Map, Pos, Combination),
+    NextDelta is Delta - 1,
+    NextPos is Pos + 8,
+    diagonalCombinationsUpLeft(Map, NextPos, NextDelta, Combinations).
+
+
+generateDiagonalsUpRight(Map, Pos, Combinations):-
+    findUpRight(Pos, UpRight),
+    findDownLeft(Pos, DownLeft),
+    diagonalDelta(UpRight, DownLeft, Delta),
+    diagonalCombinationsUpRight(Map, UpRight, Delta, Combinations).
+
+diagonalCombinationsUpRight(_, _, Delta, []):-
+    Delta =< 2.
+diagonalCombinationsUpRight(Map, Pos, Delta, [Combination|Combinations]):-
+    diagonalCombinationUpRight(Map, Pos, Combination),
+    NextDelta is Delta - 1,
+    NextPos is Pos + 6,
+    diagonalCombinationsUpRight(Map, NextPos, NextDelta, Combinations).
+    
+    
+
+
+% Helper
+
+getCombination(Map, Pos, Offset, [X1, X2, X3, X4]):-
+    I is Pos + Offset,
+    J is I + Offset,
+    K is J + Offset,
+    nth1(Pos, Map, X1),
+    nth1(I, Map, X2),
+    nth1(J, Map, X3),
+    nth1(K, Map, X4).
 
 
 
 %% Find
+% The 'findX' predicates finds the position furthest away possible in
+% a maximum range of four steps away. Hence the appended '4' to the
+% functors of the helper predicates.
 
-% Finds the uppermost position possible of Pos with
+
 findUp(Pos, NewPos):-
     up4(Pos, 0, NewPos).
 up4(Pos, 3, Pos).
@@ -148,7 +204,7 @@ upLeftDiag4(Pos, Iter, NewPos) :-
     upLeftDiag4(NextPos, NextIter, NewPos));
     NewPos = Pos.
 
-findUpRightDiag(Pos, NewPos):-
+findUpRight(Pos, NewPos):-
     upRightDiag4(Pos, 0, NewPos).
 
 upRightDiag4(Pos, 3, Pos).
@@ -160,7 +216,7 @@ upRightDiag4(Pos, Iter, NewPos) :-
     upRightDiag4(NextPos, NextIter, NewPos));
     NewPos = Pos.
 
-findDownLeftDiag(Pos, NewPos):-
+findDownLeft(Pos, NewPos):-
     downLeftDiag4(Pos, 0, NewPos).
 
 downLeftDiag4(Pos, 3, Pos).
@@ -173,7 +229,7 @@ downLeftDiag4(Pos, Iter, NewPos) :-
     NewPos = Pos.
 
 
-findDownRightDiag(Pos, NewPos):-
+findDownRight(Pos, NewPos):-
     downRightDiag4(Pos, 0, NewPos).
 
 downRightDiag4(Pos, 3, Pos).
@@ -186,7 +242,7 @@ downRightDiag4(Pos, Iter, NewPos):-
     NewPos = Pos.
 
 
-% +1h 50 min :'(
+% This predicate took about 1h 50 min to get right...
 checkCombinations(Player, Combinations):-
     \+ checkCombinations_(Player, Combinations).
 
@@ -199,13 +255,13 @@ checkCombinations_(Player, [[_,_,_,_]|CS]) :-
 
 
 getPos(Row, Col, P):-
-    P is Col*7+Row.
+    Y is Col - 1,
+    P is Y*7+Row.
 
 
 %%% TESTS %%%
 
 
-                                
 map1([1,0,0,1,0,0,7,            % Test map
       0,2,0,2,0,6,0,
       0,0,3,3,5,0,0,
@@ -213,8 +269,47 @@ map1([1,0,0,1,0,0,7,            % Test map
       0,0,3,5,5,0,0,
       0,2,0,6,0,6,0]).
 
+map2([0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,
+      0,2,0,0,0,0,0,
+      0,2,2,0,0,0,0,
+      0,1,1,2,1,0,0,
+      0,1,1,1,2,1,0]).
+
+
 
 %% Test combination generation
+
+testGenerateCombinations(X):-
+    map2(M),
+    generateCombinations(M, 16, X).
+
+% Diagonals
+
+testGenerateDiagonals:-
+    map1(M),
+    generateDiagonals(M, 25, L),
+    sort(L, S),
+    sort([[1,2,3,4], [2,3,4,5], [3,4,5,6], [7,6,5,4], [6,5,4,3], [5,4,3,2]], S).
+
+testDiagonalDelta:-
+    diagonalDelta(1, 9, 1),     % upleft - downright
+    diagonalDelta(1, 25, 3),    % upleft - downright
+    diagonalDelta(7, 25, 3),    % upright - downleft
+    diagonalDelta(14, 26, 2).   % upright - downleft
+
+
+testDiagonalCombinationUpLeft:-
+    map1(M),
+    diagonalCombinationUpLeft(M, 1, [1, 2, 3, 4]),
+    diagonalCombinationUpLeft(M, 16, [0, 3, 5, 0]).
+
+testDiagonalCombinationUpRight:-
+    map1(M),
+    diagonalCombinationUpRight(M, 7, [7, 6, 5, 4]),
+    diagonalCombinationUpRight(M, 21, [0, 6, 5, 6]).
+
+
 
 % Vertical
 testGenerateVertical:-
@@ -230,8 +325,8 @@ testVerticalDelta:-
 
 testVerticalCombination:-
     map1(M),
-    verticalCombination(M, 4, 25, [1, 2, 3, 4]),
-    verticalCombination(M, 20, 41, [0, 6, 0, 6]).
+    verticalCombination(M, 4, [1, 2, 3, 4]),
+    verticalCombination(M, 20, [0, 6, 0, 6]).
 
 % Horizontal
 testGenerateHorizontal:-
@@ -250,10 +345,20 @@ testHorizontalDelta:-
 
 testHorizontalCombination:-
     map1(M),
-    horizontalCombination(M, 22, 25, [1, 2, 3, 4]),
-    horizontalCombination(M, 16, 19, [0, 3, 3, 5]).
+    horizontalCombination(M, 22, [1, 2, 3, 4]),
+    horizontalCombination(M, 16, [0, 3, 3, 5]).
 
-% Diagonal
+testAllGenerationPredicates:-
+    testHorizontalCombination,
+    testHorizontalDelta,
+    testGenerateHorizontal,
+    testVerticalCombination,
+    testVerticalDelta,
+    testGenerateVertical,
+    testDiagonalCombinationUpRight,
+    testDiagonalCombinationUpLeft,
+    testDiagonalDelta,
+    testGenerateDiagonals.
 
 
 %% Test directions
@@ -270,6 +375,12 @@ tleft:-
     findLeft(7, 4),
     findLeft(36, 36),
     findLeft(42, 39).
+
+tright:-
+    findRight(1, 7),
+    findRight(7, 7),
+    findRight(25, 28),
+    findRight(41, 42).
 
 tupleft:-
     upLeftDiag(9, 1),
@@ -318,7 +429,7 @@ tcc6:-
 tcc7:-
     checkCombinations('r', [[0,0,0,0],[43,6,5,2],[0,0,0,0],[-2,34,4,4],['r','r','r','r'],[43,6,5,2],[0,0,0,0],[-2,34,4,4],[43,6,5,2]]).
 
-% MEGA TEST
+% MEGA TEST for check combinations
 mt:-
     tcc,
     tcc2,
@@ -328,10 +439,20 @@ mt:-
     tcc6,
     tcc7.
 
+
+%% Tests for isWin and isNotWin
 t1:-
     map1(Map),
     getPos(3, 3, Pos),
     isNotAWin(Map, 'R', Pos).
+
+t2:-
+    map2(Map),
+    isWin(Map, 2, 16).
+
+t3:-
+    map2(Map),
+    isNotAWin(Map, 1, 16).
 
 go:-
     consult('alignment.pl').
