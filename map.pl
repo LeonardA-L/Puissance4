@@ -1,4 +1,4 @@
-% use_module(nom_du_module).
+use_module(library(random)).
 %module(UI, showGrid).
 
 :- dynamic etat/1.
