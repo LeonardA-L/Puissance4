@@ -8,9 +8,9 @@
 victory(_).
 
 % load AI modules
- playGame(X) :- aiplayA(X), N is (mod(X+1,2)),
+playGame(X) :- aiplayA(mod(X,2)+1), N is X+1,
 	       victory(X),
-	       aiplayB(N), K is (mod(N+1,2)),
+	       aiplayB(mod(N,2)+1), K is N+1,
 	       victory(N),
 	       playGame(K).
 
