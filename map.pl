@@ -29,24 +29,24 @@ add(Col, NbP):-write('Modification...'),
 		assert(etat(Resultat)),
 		write('\nModifié\n'),!.
 
-reset:- retract(etat(L)),
+reset:- retract(etat(_)),
 		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).
 
 salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
-salut(W).
+salut(_).
 
-findPos(List,Col,1,PosFinal):-PosFinal = Col.
-findPos(List,Col,2,PosFinal):-PosFinal = Col.
-findPos(List,Col,-1,PosFinal):-PosFinal is Col.
-findPos(List,Col,Val,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
+findPos(_,Col,1,PosFinal):-PosFinal = Col.
+findPos(_,Col,2,PosFinal):-PosFinal = Col.
+findPos(_,Col,-1,PosFinal):-PosFinal is Col.
+findPos(List,Col,_,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
 
 replace([_|T], 1, X, [X|T]).
 replace([H|T], I, X, [H|R]):- I > 0, NI is I-1, replace(T, NI, X, R), !.
 replace(L, _, _, L).
 
-findElem([Element | List], 1, Resultat):-Resultat = Element.
+findElem([Element | _], 1, Resultat):-Resultat = Element.
 findElem([],N, Resultat):- N > 0, Resultat = -1.
-findElem([Element|List],N, Resultat) :- N1 is N-1, findElem(List,N1,Resultat).
+findElem([_|List],N, Resultat) :- N1 is N-1, findElem(List,N1,Resultat).
 
 showGrid:-	etat(L),
 			length(L,Taille),

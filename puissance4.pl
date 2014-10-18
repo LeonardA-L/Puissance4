@@ -8,14 +8,11 @@
 
 victory(X):- X>10, write('victory'),write(X).
 
-% load AI modules
-%playTurn(X) :- A is (X mod 2)+1; (X mod 2) == 0, aiplayA(A) ; (X mod 2) == 1, aiplayB(A).
-%playTurn(X) :- A is (X mod 2)+1, aiplayB(A).
 
-playTurn(X) :-  writef('%i',[X mod 2]),((X mod 2) == 0) *->
-     (write('oui'),A is (X mod 2)+1,aiplayA(A))
-  ; 
-    (write('non'),A is (X mod 2)+1,aiplayB(A))
-  .
+playModulo(X) :- B is (X mod 2)+1, playTurn(B).
 
-playGame :- repeat, nb_getval(turn, X), playTurn(X), A is X+1, nb_setval(turn, A), (victory(X)).
+playTurn(1) :- aiplayA(1).
+playTurn(2) :- aiplayB(2).
+
+
+playGame :- repeat, nb_getval(turn, X), playModulo(X), A is X+1, nb_setval(turn, A), (victory(X)).
