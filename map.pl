@@ -14,7 +14,7 @@ affich:-write('Affichage\n'),
 		write('\nFin affichage\n').
 
 %Si un jeton existe dans une colonne, on peut ajouter encore un
-add(Col, NbP):-write('Modification...'),
+add(Col, NbP):-write('Modification...'),nl,
 		Col < 8,
 		Col > 0,
 		NbP > 0,

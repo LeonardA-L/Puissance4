@@ -1,6 +1,7 @@
 % Load external modules
 :- [map].
-:- use_module(ai1, [play/1 as aiplayA]).
+%:- use_module(ai1, [play/1 as aiplayA]).
+:- use_module(aiHuman, [play/1 as aiplayA]).
 :- use_module(ai2, [play/1 as aiplayB]).
 
 % Set "number of turns" global variable
@@ -10,7 +11,7 @@
 victory(X):- X>10, write('victory'),write(X).
 
 % Don't know why this has to be nested. Computes ID of currently player and calls for him
-playModulo(X) :- B is (X mod 2)+1, playTurn(B).
+playModulo(X) :- B is (X mod 2)+1, write("player "+B+" is playing"),nl, playTurn(B).
 
 % Calls play method of the right player module
 playTurn(1) :- aiplayA(1).
