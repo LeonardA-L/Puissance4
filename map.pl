@@ -2,10 +2,10 @@ use_module(library(random)).
 %module(UI, showGrid).
 
 :- dynamic etat/1.
-
+:- dynamic pos/1.
 etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).
 
-
+pos(-1).
 
 affich:-write('Affichage\n'),
 		etat(L),
@@ -27,6 +27,8 @@ add(Col, NbP):-write('Modification...'),nl,
 		replace(L,Pos1,NbP,Resultat),
 		retract(etat(L)),
 		assert(etat(Resultat)),
+                retract(pos(_)),
+                assert(pos(Pos1)),
 		write('\nModifié\n'),!.
 
 resetMap:- retract(etat(_)),

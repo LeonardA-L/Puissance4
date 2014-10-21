@@ -11,10 +11,20 @@
 
 % Test Victory
 victory(40) :- write('End of the game, it\'s a TIE !').
-victory(X):- X>60, write('victory'),write(X).   % 60 is just something we won't reach. To be replaced with actual victory conditions
+victory(X):-
+    etat(Map),
+    getPlayerSymbol(X, Player),
+    pos(Pos),
+    isWin(Map, Player, Pos),
+    write('victory'),
+    write(X). % 60 is just something we won't reach. To be replaced with actual victory conditions
+
+
+getPlayerSymbol(X, Player):-
+    Player is (X mod 2) + 1.
 
 % Don't know why this has to be nested. Computes ID of currently player and calls for him
-playModulo(X) :- B is (X mod 2)+1, write("player "+B+" is playing"),nl, playTurn(B).
+playModulo(X) :- getPlayerSymbol(X, B), write("player "+B+" is playing"),nl, playTurn(B).
 
 % Calls play method of the right player module
 playTurn(1) :- aiplayA(1).
