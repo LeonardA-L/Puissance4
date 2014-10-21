@@ -1,5 +1,6 @@
-:- use_module(library(lists)).
-
+:- module(alignment, [isWin/3]).
+:- use_module(library(lists), [nth1/3]).
+:- meta_predicate isWin(+, +, +).
 
 isWin(Map, Player, Pos):-
     \+ isNotAWin(Map, Player, Pos).
