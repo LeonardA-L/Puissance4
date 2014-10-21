@@ -16,11 +16,12 @@ chooseB(random):- use_module(ai2, [play/1 as aiplayB]).
 
 % Set "number of turns" global variable
 :- nb_setval(turn, 0).
+:- nb_setval(game, 0).
 
 listAI :- write('- human'), nl,
 		  write('- random'), nl.
 
-startGame :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
+config :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
 	% Choose AI A
 	repeat,
 	write('Please choose AI A between :'), nl,
@@ -30,7 +31,9 @@ startGame :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
 	repeat,
 	write('Please choose AI B between :'), nl,
 	listAI,
-	read(Y), (chooseB(Y)),
+	read(Y), (chooseB(Y)).
+
+startGame :- config,
 	playGame, !.
 
 % Test Victory
@@ -65,3 +68,7 @@ playGame :- repeat, nb_getval(turn, X), playModulo(X), A is X+1, nb_setval(turn,
 reset :- resetMap, 
 		nb_setval(turn, 0).
 
+%endSet(X, Max) :- X>Max, write('Time out').
+%launchSet(Number) :- repeat, nb_getval(game, A), playGame, reset, B is A+1, nb_setval(game, B), (endSet(B,Number)).
+launchSet(0) :- write('ok lol').
+launchSet(Max) :- X is Max - 1, playGame, reset, launchSet(X).
