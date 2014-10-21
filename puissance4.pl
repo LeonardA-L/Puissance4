@@ -1,13 +1,37 @@
 % Load external modules
 :- [map].
-%:- use_module(ai1, [play/1 as aiplayA]).
-:- use_module(aiHuman, [play/1 as aiplayA]).
-:- use_module(ai2, [play/1 as aiplayB]).
+
+% loading AI modules
+chooseA(silly) :- use_module(ai1, [play/1 as aiplayA]).
+chooseA(human) :- use_module(aiHuman, [play/1 as aiplayA]).
+chooseA(random):- use_module(ai2, [play/1 as aiplayA]).
+
+chooseB(silly) :- use_module(ai1, [play/1 as aiplayB]).
+chooseB(human) :- use_module(aiHuman, [play/1 as aiplayB]).
+chooseB(random):- use_module(ai2, [play/1 as aiplayB]).
+
+% Loading alignement check
 :- use_module(alignment, [isWin/3 as isWin]).
 
 
 % Set "number of turns" global variable
 :- nb_setval(turn, 0).
+
+listAI :- write('- human'), nl,
+		  write('- random'), nl.
+
+startGame :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
+	% Choose AI A
+	repeat,
+	write('Please choose AI A between :'), nl,
+	listAI,
+	read(X), (chooseA(X)),
+	% Choose AI B
+	repeat,
+	write('Please choose AI B between :'), nl,
+	listAI,
+	read(Y), (chooseB(Y)),
+	playGame.
 
 % Test Victory
 victory(40) :- write('End of the game, it\'s a TIE !').

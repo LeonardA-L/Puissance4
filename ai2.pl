@@ -3,3 +3,4 @@
 play(NbJ):-	random(0,8,Res1),
 			add(Res1, NbJ).
 %play(A) :- add(5,A).
+% One two one two, this is a test.
