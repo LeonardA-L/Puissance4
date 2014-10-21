@@ -8,7 +8,8 @@
 :- nb_setval(turn, 0).
 
 % Test Victory
-victory(X):- X>10, write('victory'),write(X).
+victory(40) :- write('End of the game, it\'s a TIE !').
+victory(X):- X>60, write('victory'),write(X).   % 60 is just something we won't reach. To be replaced with actual victory conditions
 
 % Don't know why this has to be nested. Computes ID of currently player and calls for him
 playModulo(X) :- B is (X mod 2)+1, write("player "+B+" is playing"),nl, playTurn(B).
@@ -24,5 +25,6 @@ playTurn(2) :- aiplayB(2).
 % - playModulo : ask for a player to play
 playGame :- repeat, nb_getval(turn, X), playModulo(X), A is X+1, nb_setval(turn, A), (victory(X)).
 
-% That way victory conditions are tested directly after each ai plays,
-% AND it's not the job of the player to test if he's won
+% Resets the game before starting a new one
+reset :- resetMap, 
+		nb_setval(turn, 0).
