@@ -14,8 +14,7 @@ affich:-write('Affichage\n'),
 		write('\nFin affichage\n').
 
 %Si un jeton existe dans une colonne, on peut ajouter encore un
-add(Col, NbP):-write('Modification...'),nl,
-		Col < 8,
+add(Col, NbP):-	Col < 8,
 		Col > 0,
 		NbP > 0,
 		NbP < 3,
@@ -28,8 +27,7 @@ add(Col, NbP):-write('Modification...'),nl,
 		retract(etat(L)),
 		assert(etat(Resultat)),
                 retract(pos(_)),
-                assert(pos(Pos1)),
-		write('\nModifié\n'),!.
+                assert(pos(Pos1)),!.
 
 resetMap:- retract(etat(_)),
 		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).

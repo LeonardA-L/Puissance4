@@ -31,7 +31,7 @@ startGame :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
 	write('Please choose AI B between :'), nl,
 	listAI,
 	read(Y), (chooseB(Y)),
-	playGame.
+	playGame, !.
 
 % Test Victory
 victory(40) :- write('End of the game, it\'s a TIE !').
@@ -40,15 +40,15 @@ victory(X):-
     getPlayerSymbol(X, Player),
     pos(Pos),
     isWin(Map, Player, Pos),
-    write('victory'),
-    write(X). % 60 is just something we won't reach. To be replaced with actual victory conditions
+    write('victory ! Player '), write(Player), write(" wins after "), write(X), write(" turns."), nl,
+    showGrid.
 
 
 getPlayerSymbol(X, Player):-
     Player is (X mod 2) + 1.
 
 % Don't know why this has to be nested. Computes ID of currently player and calls for him
-playModulo(X) :- getPlayerSymbol(X, B), write("player "+B+" is playing"),nl, playTurn(B).
+playModulo(X) :- getPlayerSymbol(X, B), write("player "), write(B), write(" is playing"),nl, playTurn(B).
 
 % Calls play method of the right player module
 playTurn(1) :- aiplayA(1).
