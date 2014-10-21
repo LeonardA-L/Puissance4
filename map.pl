@@ -29,7 +29,7 @@ add(Col, NbP):-write('Modification...'),nl,
 		assert(etat(Resultat)),
 		write('\nModifié\n'),!.
 
-reset:- retract(etat(_)),
+resetMap:- retract(etat(_)),
 		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).
 
 salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
