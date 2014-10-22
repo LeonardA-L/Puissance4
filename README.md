@@ -14,7 +14,7 @@ startGame.
 startMany(10).
 ```
 
-/!\ Once the AIs are chosen, there's no other to choose other than restarting puissance4.pl
+/!\ Once the AIs are chosen, there's no other way to change them than restarting puissance4.pl. Even if the program asks you to choose some ^^ (work in progress).
 
 ------
 
