@@ -1,6 +1,7 @@
 % Load external modules
 :- [map].
 
+% Set dynamic variables to be able to do some stats
 :- dynamic amountInSet/1.
 :- dynamic aWon/1.
 :- dynamic bWon/1.
@@ -9,10 +10,8 @@ aWon(0).
 bWon(0).
 amountInSet(-1).
 
-incrementWinner(1) :- retract(aWon(R)), A is R+1, assert(aWon(A)).
-incrementWinner(2) :- retract(bWon(R)), A is R+1, assert(bWon(A)).
 
-% loading AI modules
+% loading AI modules (called when needed)
 chooseA(silly) :- use_module(ai1, [play/1 as aiplayA]).
 chooseA(human) :- use_module(aiHuman, [play/1 as aiplayA]).
 chooseA(random):- use_module(ai2, [play/1 as aiplayA]).
@@ -26,6 +25,7 @@ chooseB(random):- use_module(ai2, [play/1 as aiplayB]).
 
 
 % Set "number of turns" global variable
+% Yes, this could have been done with a regular assert
 :- nb_setval(turn, 0).
 :- nb_setval(game, 0).
 
@@ -46,8 +46,10 @@ config :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
 	read(Y), (chooseB(Y)),
 	assert(b(Y)).
 
-startGame :- config,
-	playGame, !.
+% Increment the stats part
+incrementWinner(1) :- retract(aWon(R)), A is R+1, assert(aWon(A)).
+incrementWinner(2) :- retract(bWon(R)), A is R+1, assert(bWon(A)).
+
 
 % Test Victory
 victory(40) :- write('End of the game, it\'s a TIE !').
@@ -79,13 +81,16 @@ playTurn(2) :- aiplayB(2).
 playGame :- reset, repeat, nb_getval(turn, X), playModulo(X), A is X+1, nb_setval(turn, A), (victory(X)).
 
 % Resets the game before starting a new one
-reset :- resetMap, 
-		nb_setval(turn, 0).
-
+reset :- resetMap, nb_setval(turn, 0).
+% Resets the stats before launching a set
 resetStats :- retract(aWon(_)), assert(aWon(0)), retract(bWon(_)), assert(bWon(0)).
 
-startMany(Max) :- resetStats, retract(amountInSet(_)), assert(amountInSet(Max)), launchSet(Max), !.
-		
+% The predicates used to launch a set of matches.
 writePlayer(Player, Won, Total) :- write('Player '),write(Player),write(' won '), write(Won), write(' matches out of '),write(Total), write('.'),nl.
 launchSet(0) :- aWon(Awon), bWon(Bwon), amountInSet(Max), a(A), b(B), write('End of the set, '), writePlayer(A, Awon, Max), writePlayer(B, Bwon, Max).
 launchSet(Max) :- X is Max - 1, playGame, launchSet(X).
+
+
+% ------------- Actually used when one wants to launch a game
+startMany(Max) :- config, resetStats, retract(amountInSet(_)), assert(amountInSet(Max)), launchSet(Max), !.
+startGame :- config, playGame, !.
