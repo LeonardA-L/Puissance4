@@ -52,7 +52,7 @@ incrementWinner(2) :- retract(bWon(R)), A is R+1, assert(bWon(A)).
 
 
 % Test Victory
-victory(42) :- write('End of the game, it\'s a TIE !').
+victory(41) :- write('End of the game, it\'s a TIE !'),nl, showGrid.
 victory(X):-
     etat(Map),
     getPlayerSymbol(X, Player),
