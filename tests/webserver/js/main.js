@@ -6,9 +6,9 @@
     var BOARD_WIDTH = 7;
     var BOARD_HEIGHT = 6;
 
-    var EMPTY_SYMBOL = '_';
-    var RED_SYMBOL = 'r';
-    var YELLOW_SYMBOL = 'y';
+    var EMPTY_SYMBOL = 0;
+    var RED_SYMBOL = 1;
+    var YELLOW_SYMBOL = 2;
 
 
     var clearBoard = function() {
@@ -87,10 +87,14 @@
             console.info('WebSocket connection up and running!');
             removeLoadingMessage();
             sayHi();
-        }
+        };
 
         ws.onmessage = function(messageEvent) {
             console.log('Got back: "' + messageEvent.data + '"');
+          /*  switch (messageEvent.type) {
+                case 'NEWBOARD':
+                case 'WIN':
+            }*/
         };
 
     };
