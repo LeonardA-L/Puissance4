@@ -15,10 +15,14 @@ amountInSet(-1).
 chooseA(silly) :- use_module(ai1, [play/1 as aiplayA]).
 chooseA(human) :- use_module(aiHuman, [play/1 as aiplayA]).
 chooseA(random):- use_module(ai2, [play/1 as aiplayA]).
+chooseA(gigant):- use_module(gigAInton, [play/1 as aiplayA]).
+
+%% play with ?- chooseA(gigant), chooseB(gigant), launchSet(1).
 
 chooseB(silly) :- use_module(ai1, [play/1 as aiplayB]).
 chooseB(human) :- use_module(aiHuman, [play/1 as aiplayB]).
 chooseB(random):- use_module(ai2, [play/1 as aiplayB]).
+chooseB(gigant):- use_module(gigAInton, [play/1 as aiplayB]).
 
 % Loading alignement check
 :- use_module(alignment, [isWin/3 as isWin]).

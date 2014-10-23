@@ -5,13 +5,16 @@
 %%
 %% http://en.wikipedia.org/wiki/Minimax
 %%
-%% BUGS/NOTES: No heuristics implemented
+%% BUGS/NOTES/TODO:
+%% - No heuristics implemented, NOT tested so it
+%% runs --> This doesn't work at all at the moment. <--
 
 :- module(gigAInton, [play/1]).
 
-:- use_module(alignment).
-:- use_module(library(lists)).
+:- meta_predicate play(+).
 
+%:- use_module(alignment).
+:- use_module(library(lists), [flatten/2]).
 
 
 play(Player):- etat(State), minimax(State, 5, Player, Column), add(Column, Player).
@@ -20,7 +23,7 @@ minimax(State, Depth, MaximizingPlayer, Column):-
     Depth > 2,
     getNextStates(State, MaximizingPlayer, NextStates),
     nextPlayerSymbol(MaximizingPlayer, MinPlayerSymbol),
-    enumerate(NextStates, EnumeratedStates),
+    enumerate1(NextStates, EnumeratedStates),
     NextDepth is Depth - 1,
     findBestColumn(EnumeratedStates, NextDepth, MaximizingPlayer, MinPlayerSymbol, _, Column).
 
