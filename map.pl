@@ -3,10 +3,13 @@ use_module(library(random)).
 
 :- dynamic etat/1.
 :- dynamic pos/1.
+
+% map : list wich stock current game
 etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).
 
 pos(-1).
 
+% test function ??
 affich:-write('Affichage\n'),
 		etat(L),
 		nth0(0, L, E),
@@ -29,31 +32,39 @@ add(Col, NbP):-	Col < 8,
                 retract(pos(_)),
                 assert(pos(Pos1)),!.
 
+% set the map to 0
 resetMap:- retract(etat(_)),
 		assert(etat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])).
 
-salut(W):- X is W mod 7, X == 6, write(' |\n'),!.
-salut(_).
-
+% Find the first line where we can play
 findPos(_,Col,1,PosFinal):-PosFinal = Col.
 findPos(_,Col,2,PosFinal):-PosFinal = Col.
 findPos(_,Col,-1,PosFinal):-PosFinal is Col.
 findPos(List,Col,_,PosFinal):- Position1 is Col+7, findElem(List,Position1,Resultat), findPos(List,Position1,Resultat,PosFinal).
 
+% replace element in the map
 replace([_|T], 1, X, [X|T]).
 replace([H|T], I, X, [H|R]):- I > 0, NI is I-1, replace(T, NI, X, R), !.
 replace(L, _, _, L).
 
+% find element in the map
 findElem([Element | _], 1, Resultat):-Resultat = Element.
 findElem([],N, Resultat):- N > 0, Resultat = -1.
 findElem([_|List],N, Resultat) :- N1 is N-1, findElem(List,N1,Resultat).
 
-showGrid:-	etat(L),
+% if last col, go to next line
+endLine(W):- X is W mod 7, X == 6, write(' |\n |   |   |   |   |   |   |   |\n'),!.
+endLine(_).
+
+% show game's current grid
+showGrid:-	write('   1   2   3   4   5   6   7\n  ---------------------------\n'),
+			etat(L),
 			length(L,Taille),
 			TailleN is Taille - 1,
 			forall(between(0,TailleN,I),
 				(nth0(I, L, E),
 				write(' | '),
 				write(E),
-				salut(I))
-			).
+				endLine(I))
+			),
+			write('  ---------------------------\n').
