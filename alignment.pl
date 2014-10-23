@@ -1,4 +1,4 @@
-:- module(alignment, [isWin/3
+:- module(alignment, [isWin/3,
                       isNotAWin/3,
                       findUp/2,
                       findDown/2,
@@ -8,13 +8,8 @@
                       findUpRight/2,
                       findDownLeft/2,
                       findDownRight/2,
-                      findUpLeftDiag/2,
-                      findUpRightDiag/2,
-                      findDownLeftDiag/2,
-                      findDownRightDiag/2,
                       generateCombinations/3,
-                      checkCombinations/2.]).
-:- use_module(library(lists), [nth1/3]).
+                      checkCombinations/2]).
 
 
 :- meta_predicate isWin(+, +, +),
@@ -27,12 +22,10 @@
     findUpRight(+, -),
     findDownLeft(+, -),
     findDownRight(+, -),
-    findUpLeftDiag(+, -),
-    findUpRightDiag(+, -),
-    findDownLeftDiag(+, -),
-    findDownRightDiag(+, -),
     generateCombinations(+, +, -),
     checkCombinations(+, +).
+
+:- use_module(library(lists), [nth1/3]).
 
 isWin(Map, Player, Pos):-
     \+ isNotAWin(Map, Player, Pos).

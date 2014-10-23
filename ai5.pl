@@ -1,25 +1,25 @@
-% Load external modules
-:- [map].
 
-% Loading alignement check
-:- use_module(alignment, [isWin/3 as isWin]).
+:- use_module(alignment).
+
+play(Player):- etat(Map), pos(Pos), findBestMove(Map, Pos, Player, Res).
+
+findBestMove(Pos, X, Res):- etat(Map), PosToFill is Pos-7, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+						;
+				etat(Map), PosToFill is Pos-8, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+						;
+				etat(Map), PosToFill is Pos-6, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+						;
+				etat(Map), PosToFill is Pos-1, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+						;
+				etat(Map), PosToFill is Pos+1, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+						;
+				etat(Map), PosToFill is Pos+6, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+						;
+				etat(Map), PosToFill is Pos+8, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill.
 
 
-play(NbJ, Pos):- etat(Map),findBestMove(Map, Pos, NbJ, Res).
+getPlayerSymbol(X, Player):- Player is (X+1) mod 2.
 
-findBestMove(Pos, NbJ, Res):- etat1(Map), PosToFill is Pos-7, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill
-						;
-				etat(Map), PosToFill is Pos-8, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill
-						;
-				etat(Map), PosToFill is Pos-6, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill
-						;
-				etat(Map), PosToFill is Pos-1, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill
-						;
-				etat(Map), PosToFill is Pos+1, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill
-						;
-				etat(Map), PosToFill is Pos+6, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill
-						;
-				etat(Map), PosToFill is Pos+8, findElem(Map, PosToFill, Resultat), getOpponent(Opponent, NbJ), Resultat = 0, isWin(Map, Opponent, PosToFill), Res = PosToFill.
 
 getOpponent(Opponent, CurrentPlayer):- Aux is CurrentPlayer+1, Opponent is (Aux mod 2).
 
