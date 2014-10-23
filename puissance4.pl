@@ -34,7 +34,8 @@ chooseB(gigant):- use_module(gigAInton, [play/1 as aiplayB]).
 :- nb_setval(game, 0).
 
 listAI :- write('- human'), nl,
-		  write('- random'), nl.
+		  write('- random'), nl,
+		  write('- silly'), nl.
 
 config :- write('Hello, and welcome to the Prolog enrichment center.'), nl,
 	% Choose AI A
@@ -82,7 +83,7 @@ playTurn(2) :- aiplayB(2).
 % - nb_getval : retrieve the current turn
 % - nb_setval : increment the current turn before next one
 % - playModulo : ask for a player to play
-playGame :- reset, repeat, nb_getval(turn, X), playModulo(X), A is X+1, nb_setval(turn, A), (victory(X)).
+playGame :- reset, repeat, nb_getval(turn, X), playModulo(X), A is X+1, nb_setval(turn, A), (victory(X)), reset.
 
 % Resets the game before starting a new one
 reset :- resetMap, nb_setval(turn, 0).

@@ -57,7 +57,7 @@ endLine(W):- X is W mod 7, X == 6, write(' |\n |   |   |   |   |   |   |   |\n')
 endLine(_).
 
 % show game's current grid
-showGrid:-	write('   1   2   3   4   5   6   7\n  ---------------------------\n'),
+showGrid:-	write('   1   2   3   4   5   6   7\n +---------------------------+\n'),
 			etat(L),
 			length(L,Taille),
 			TailleN is Taille - 1,
@@ -67,4 +67,4 @@ showGrid:-	write('   1   2   3   4   5   6   7\n  ---------------------------\n'
 				write(E),
 				endLine(I))
 			),
-			write('  ---------------------------\n').
+			write(' +---------------------------+\n').
