@@ -1,27 +1,30 @@
-
-:- use_module(alignment).
+% Load external modules
+:- [map].
+:- use_module(alignment, [isWin/3 as isWin]).
 
 play(Player):- etat(Map), pos(Pos), findBestMove(Map, Pos, Player, Res).
 
-findBestMove(Pos, X, Res):- etat(Map), PosToFill is Pos-7, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+% etatMapAux([]).
+
+findBestMove(Pos, Player, Res):- etat(Map), assert(mapCpy(Map)), PosToFill is Pos-7, getOpponent(Player, Opponent), Col is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X), assert(etat(X))
 						;
-				etat(Map), PosToFill is Pos-8, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+				etat(Map), assert(mapCpy(Map)), PosToFill is Pos-8, getOpponent(Player, Opponent), COl is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X)
 						;
-				etat(Map), PosToFill is Pos-6, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+				etat(Map), assert(mapCpy(Map)), PosToFill is Pos-6, getOpponent(Player, Opponent), COl is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X)
 						;
-				etat(Map), PosToFill is Pos-1, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+				etat(Map), assert(mapCpy(Map)), PosToFill is Pos-1, getOpponent(Player, Opponent), COl is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X)
 						;
-				etat(Map), PosToFill is Pos+1, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+				etat(Map), assert(mapCpy(Map)), PosToFill is Pos+1, getOpponent(Player, Opponent), COl is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X)
 						;
-				etat(Map), PosToFill is Pos+6, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill
+				etat(Map), assert(mapCpy(Map)), PosToFill is Pos+6, getOpponent(Player, Opponent), COl is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X)
 						;
-				etat(Map), PosToFill is Pos+8, getPlayerSymbol(X, Player), pos(PosToFill), isWin(Map, Player, PosToFill), Res is PosToFill.
+				etat(Map), assert(mapCpy(Map)), PosToFill is Pos+8, getOpponent(Player, Opponent), COl is PosToFill div 7, add(Col, Player), isWin(Map, Opponent, PosToFill), Res is PosToFill, retract(etat(_)), mapCpy(X).
 
 
-getPlayerSymbol(X, Player):- Player is (X+1) mod 2.
+getOpponent(X, Player):- Player is (X+1) mod 2.
 
 
-getOpponent(Opponent, CurrentPlayer):- Aux is CurrentPlayer+1, Opponent is (Aux mod 2).
+%getOpponent(Opponent, CurrentPlayer):- Aux is CurrentPlayer+1, Opponent is (Aux mod 2).
 
 myWin(Opponent, PosToFill):- etat(Map), isWin(Map, Opponent, PosToFill).
 
