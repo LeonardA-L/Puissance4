@@ -92,7 +92,7 @@ resetStats :- retract(aWon(_)), assert(aWon(0)), retract(bWon(_)), assert(bWon(0
 
 % The predicates used to launch a set of matches.
 writePlayer(Player, Won, Total) :- write('Player '),write(Player),write(' won '), write(Won), write(' matches out of '),write(Total), write('.'),nl.
-launchSet(0) :- aWon(Awon), bWon(Bwon), amountInSet(Max), a(A), b(B), write('End of the set, '), writePlayer(A, Awon, Max), writePlayer(B, Bwon, Max).
+launchSet(-1) :- aWon(Awon), bWon(Bwon), amountInSet(Max), a(A), b(B), write('End of the set, '), writePlayer(A, Awon, Max), writePlayer(B, Bwon, Max).
 launchSet(Max) :- X is Max - 1, playGame, launchSet(X).
 
 
